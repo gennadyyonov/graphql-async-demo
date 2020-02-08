@@ -1,0 +1,55 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'lv.gennadyyonov'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('graphqlJavaSpringBootVersion', "5.0.2")
+	set('graphqlJavaToolsVersion', "5.2.4")
+	set('springCloudVersion', "Hoxton.RELEASE")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+dependencies {
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	compile "org.springframework.cloud:spring-cloud-starter-sleuth"
+
+	compile "com.graphql-java:graphql-spring-boot-starter:${graphqlJavaSpringBootVersion}"
+	compile "com.graphql-java:graphiql-spring-boot-starter:${graphqlJavaSpringBootVersion}"
+	compile "com.graphql-java:graphql-java-tools:${graphqlJavaToolsVersion}"
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
